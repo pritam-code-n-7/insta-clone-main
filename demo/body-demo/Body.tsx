@@ -18,7 +18,7 @@ const Body = async () => {
   // console.log(JSON.stringify(posts));
 
   return (
-    <div className="py-20 px-10 space-y-10">
+    <div className="py-20 lg:px-50 px-10 space-y-10">
       <form action={submitAction} className="space-y-6">
         {/* File upload field */}
         <div className="space-y-4 dark:text-accent text-gray-500">
@@ -45,9 +45,9 @@ const Body = async () => {
           Your Photo Galary
         </Label>
         <ScrollArea className="border p-5 rounded-xl h-[500px] bg-muted/50">
-          <div className="grid grid-cols-2 space-y-2 space-x-2">
+          <div className="grid lg:grid-cols-4 grid-cols-2 space-y-1">
           {posts.map((post) => (
-            <Card className="bg-blue-50 border-0 shadow-md py-0 w-[130px] " key={post._id}>
+            <Card className="bg-blue-50 border-0 shadow-md py-0 lg:w-[360px] md:w-[170px] sm:w-[150px] xs:w-[140px] " key={post._id}>
                 {post.image?.secure_url && (
                   <Image
                     src={post.image.secure_url}
@@ -57,7 +57,7 @@ const Body = async () => {
                     className="w-full rounded-t-xl"
                   />
                 )}
-              <CardContent className="mb-2 dark:text-black">
+              <CardContent className="dark:text-black mb-2">
                 <QuoteIcon className="rotate-180 right-0"/>
                 <p className="font-semibold text-pretty lg:text-base text-xs ml-4">{post.caption}</p>
               </CardContent>
