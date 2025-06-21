@@ -8,10 +8,11 @@ import SubmitButton from "../button-demo/SubmitButton";
 
 import React from "react";
 import { getAction, submitAction } from "@/app/actions/fileAction";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { QuoteIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
+import ButtonDemo from "../button-demo/ButtonDemo";
 
 const Body = async () => {
   const posts = await getAction();
@@ -61,6 +62,10 @@ const Body = async () => {
                 <QuoteIcon className="rotate-180 right-0"/>
                 <p className="font-semibold text-pretty lg:text-base text-xs ml-4">{post.caption}</p>
               </CardContent>
+              <CardFooter className="grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-2 p-5">
+                <ButtonDemo name="Edit" type="button" className="py-3 px-6 rounded-md shadow-md bg-black"/>
+                <ButtonDemo name="Delete" type="button" className="py-3 px-6 rounded-md shadow-md bg-red-500"/>
+              </CardFooter>
             </Card>
           ))}
           </div>
