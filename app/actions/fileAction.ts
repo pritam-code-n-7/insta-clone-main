@@ -3,22 +3,24 @@
 import cloudinary from "@/lib/cloudinary";
 import { dbConnect } from "@/lib/db";
 import { Post, PostType } from "@/models/post";
+import { TActionResponse } from "@/types/Type";
+import { UpdateSchema } from "@/validations/validationSchema";
 import { revalidatePath } from "next/cache";
 
-export const submitAction = async (formData: FormData) => { 
-  console.log("Form data are"+ formData);
-   
+export const submitAction = async (formData: FormData) => {
+  console.log("Form data are" + formData);
+
   try {
     const dropzoneFile = formData.get("dropzoneFile") as File;
-    const caption = formData.get("caption");
+    const caption = formData.get("caption") as string;
 
     // Type check
     if (!(dropzoneFile instanceof File)) {
-      throw new Error("Uploaded file is invalid.")
+      throw new Error("Uploaded file is invalid.");
     }
 
     if (!caption || typeof caption !== "string") {
-      throw new Error("Caption is required.")
+      throw new Error("Caption is required.");
     }
 
     await dbConnect();
@@ -41,7 +43,6 @@ export const submitAction = async (formData: FormData) => {
       throw new Error("Cloudinary did not return image URL or public ID");
     }
 
-    
     const newPost = new Post<PostType>({
       caption,
       image: {
@@ -51,18 +52,16 @@ export const submitAction = async (formData: FormData) => {
     });
 
     console.log("New post", newPost);
-    
+
     await newPost.save();
-    
+
     // Perform mutation
-    revalidatePath("/", "page")
+    revalidatePath("/", "page");
 
-    console.log("Image and caption uploaded successfully.")
-
+    console.log("Image and caption uploaded successfully.");
   } catch (error) {
     console.error(error);
-    throw new Error("Something went wrong. Try again later.")
-
+    throw new Error("Something went wrong. Try again later.");
   }
 };
 
@@ -70,40 +69,66 @@ export const getAction = async () => {
   await dbConnect();
 
   const data = await Post.find();
-  console.log("get data"+data);
+  console.log("get data" + data);
   return data;
 };
 
-export const getActionById = async ({params}:{params:{id: string}})=>{
+export const getActionById = async (id: string) => {
   try {
-    const {id} = params;
-
-    const data = await Post.findById(id)
+    const data = await Post.findById(id);
     console.log(data);
 
-    if(!data) throw new Error('No post is found with this id.')
+    if (!data) throw new Error("No post is found with this id.");
 
     return data;
-
   } catch (error) {
     console.error(error);
   }
-}
+};
 
-export const updateAction = async ()=>{
+export const updateAction = async (
+  _prevState: TActionResponse,
+  formData: FormData
+): Promise<TActionResponse> => {
+  const parsedData = UpdateSchema.safeParse({
+    id: formData.get("id"),
+    caption: formData.get("caption"),
+  });
+
+  if (!parsedData.success) {
+    return {
+      success: false,
+      message: "Validation Failed",
+      errors: parsedData.error.flatten().fieldErrors,
+    };
+  }
+
+  const { id, caption } = parsedData.data;
+
   try {
-    
-  } catch (error) {
-    console.error(error);
-    
-  }
-}
+    await dbConnect();
 
-export const deleteAction = async ()=>{
-  try {
-    
+    const data = await Post.findByIdAndUpdate(id, { caption }, { new: true });
+    console.log(data);
+
+    revalidatePath(`/edit/${id}`, "page");
+    return {
+      success: true,
+      message: "Caption updated successfully",
+      data: { id, caption },
+    };
   } catch (error) {
     console.error(error);
-    
+    return {
+      success: false,
+      message: "Failed to update caption",
+    };
   }
-}
+};
+
+export const deleteAction = async () => {
+  try {
+  } catch (error) {
+    console.error(error);
+  }
+};
