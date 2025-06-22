@@ -111,7 +111,7 @@ export const updateAction = async (
     const data = await Post.findByIdAndUpdate(id, { caption }, { new: true });
     console.log(data);
 
-    revalidatePath(`/edit/${id}`, "page");
+    revalidatePath("/", "page");
     return {
       success: true,
       message: "Caption updated successfully",
@@ -126,9 +126,25 @@ export const updateAction = async (
   }
 };
 
-export const deleteAction = async () => {
+export const deleteAction = async (formData: FormData):Promise<TActionResponse> => {
   try {
+    const id = formData.get('id')
+
+    dbConnect();
+    const data = await Post.findByIdAndDelete(id)
+    console.log(data);
+    
+    revalidatePath('/', 'page')
+    return{
+      success: true,
+      message: 'Post deleted successfully.'
+    }
+    
   } catch (error) {
     console.error(error);
+    return {
+      success: false,
+      message: 'Failed to delete post.'
+    }
   }
 };

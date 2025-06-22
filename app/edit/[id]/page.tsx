@@ -3,14 +3,15 @@ import EditForm from "@/demo/form-demo/EditForm";
 import React from "react";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const postDetails = await getActionById(params.id);
+  const {id} = await params;
+  const postDetails = await getActionById(id);
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
       <EditForm
         caption={postDetails.caption}
         imageUrl={postDetails.image.secure_url}
-        id={params.id}
+        id={id}
       />
     </div>
   );

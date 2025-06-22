@@ -7,13 +7,14 @@ import FileUploadField from "../file-upload-demo/FileUploadField";
 import SubmitButton from "../button-demo/SubmitButton";
 
 import React from "react";
-import { getAction, submitAction } from "@/app/actions/fileAction";
+import { deleteAction, getAction, submitAction } from "@/app/actions/fileAction";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { QuoteIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import ButtonDemo from "../button-demo/ButtonDemo";
 import Link from "next/link";
+import DeleteButton from "../button-demo/DeleteButton";
 
 const Body = async () => {
   const posts = await getAction();
@@ -68,7 +69,7 @@ const Body = async () => {
                 <Link href={`/edit/${post._id}`}>
                 <ButtonDemo name="Edit" type="button" className="py-3 px-6 rounded-md shadow-md bg-black"/>
                 </Link>
-                <ButtonDemo name="Delete" type="button" className="py-3 px-6 rounded-md shadow-md bg-red-500"/>
+                <DeleteButton id={post._id.toString()} action={deleteAction}/>
               </CardFooter>
             </Card>
           ))}
