@@ -73,3 +73,37 @@ export const getAction = async () => {
   console.log("get data"+data);
   return data;
 };
+
+export const getActionById = async ({params}:{params:{id: string}})=>{
+  try {
+    const {id} = params;
+
+    const data = await Post.findById(id)
+    console.log(data);
+
+    if(!data) throw new Error('No post is found with this id.')
+
+    return data;
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const updateAction = async ()=>{
+  try {
+    
+  } catch (error) {
+    console.error(error);
+    
+  }
+}
+
+export const deleteAction = async ()=>{
+  try {
+    
+  } catch (error) {
+    console.error(error);
+    
+  }
+}

@@ -13,6 +13,7 @@ import { QuoteIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import ButtonDemo from "../button-demo/ButtonDemo";
+import Link from "next/link";
 
 const Body = async () => {
   const posts = await getAction();
@@ -45,6 +46,7 @@ const Body = async () => {
         <Label className="font-semibold text-xl font-sans">
           Your Photo Galary
         </Label>
+
         <ScrollArea className="border p-5 rounded-xl h-[500px] bg-muted/50">
           <div className="grid lg:grid-cols-4 grid-cols-2 space-y-1">
           {posts.map((post) => (
@@ -63,7 +65,9 @@ const Body = async () => {
                 <p className="font-semibold text-pretty lg:text-base text-xs ml-4">{post.caption}</p>
               </CardContent>
               <CardFooter className="grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-2 p-5">
+                <Link href={`/edit/${post._id}`}>
                 <ButtonDemo name="Edit" type="button" className="py-3 px-6 rounded-md shadow-md bg-black"/>
+                </Link>
                 <ButtonDemo name="Delete" type="button" className="py-3 px-6 rounded-md shadow-md bg-red-500"/>
               </CardFooter>
             </Card>
