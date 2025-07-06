@@ -23,13 +23,14 @@ export default function EditForm({
 }) {
   const [state, formAction] = useActionState(updateAction, {
     success: false,
+    message: '',
   });
 
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (state.success) {
-      toast.success(state.message || "Caption updated successfully!");
+      toast.success(state.message);
       formRef.current?.reset();
     } else if (state.message && !state.success) {
       toast.error(state.message);
@@ -70,7 +71,7 @@ export default function EditForm({
             className="rounded-xl h-12 shadow-none"
           />
           <Label>This field is for caption.</Label>
-          {state.errors?.caption && (<p className="text-red-500 text-sm">{state.errors?.cation}</p>)}
+          {state.errors?.caption && (<p className="text-red-500 text-sm">{state.errors?.caption}</p>)}
 
           {/* Hidden input for id */}
           <Input type="hidden" name="id" value={id} />
