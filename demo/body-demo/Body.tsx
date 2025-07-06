@@ -1,4 +1,3 @@
-"use server";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,6 +31,7 @@ const Body = async () => {
         {/* Caption input field */}
         <div className="space-y-4 dark:text-accent text-gray-500">
           <Input
+            required
             type="text"
             name="caption"
             placeholder="Fair and Lovely"
@@ -49,25 +49,25 @@ const Body = async () => {
         </Label>
 
         <ScrollArea className="border p-5 rounded-xl h-[500px] bg-muted/50">
-          <div className="grid lg:grid-cols-4 grid-cols-2 space-y-1">
+          <div className="grid lg:grid-cols-4 grid-cols-1 gap-2">
           {posts.map((post) => (
-            <Card className="bg-blue-50 border-0 shadow-md py-0 lg:w-[360px] md:w-[170px] sm:w-[150px] xs:w-[140px] " key={post._id}>
+            <Card key={post._id} className="bg-blue-50 border-0 shadow-md py-0 w-full lg:h-[450px] h-[400px]">
                 {post.image?.secure_url && (
                   <Image
                     src={post.image.secure_url}
                     alt={post.caption}
                     width={200}
                     height={200}
-                    className="w-full rounded-t-xl"
+                    className="w-full rounded-t-xl "
                   />
                 )}
               <CardContent className="dark:text-black mb-2">
                 <QuoteIcon className="rotate-180 right-0"/>
                 <p className="font-semibold text-pretty lg:text-base text-xs ml-4">{post.caption}</p>
               </CardContent>
-              <CardFooter className="grid lg:grid-cols-2 grid-cols-1 lg:gap-20 gap-2 p-5">
+              <CardFooter className="flex items-center justify-between">
                 <Link href={`/edit/${post._id}`}>
-                <ButtonDemo name="Edit" type="button" className="py-3 px-6 rounded-md shadow-md bg-black"/>
+                <ButtonDemo name="Edit" type="button" className="h-12 w-24 rounded-md shadow-md bg-black"/>
                 </Link>
                 <DeleteButton id={post._id.toString()} action={deleteAction}/>
               </CardFooter>
