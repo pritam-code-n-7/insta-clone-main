@@ -1,6 +1,7 @@
 "use server";
 
 import cloudinary from "@/lib/cloudinary";
+import type { UploadApiResponse, UploadApiErrorResponse } from "cloudinary";
 import { dbConnect } from "@/lib/db";
 import { Post, PostType } from "@/models/post";
 import { TActionResponse } from "@/types/Type";
@@ -8,60 +9,73 @@ import { UpdateSchema } from "@/validations/validationSchema";
 import { revalidatePath } from "next/cache";
 
 export const submitAction = async (formData: FormData) => {
-  console.log("Form data are" + formData);
-
   try {
-    const dropzoneFile = formData.get("dropzoneFile") as File;
-    const caption = formData.get("caption") as string;
+    const dropzoneFile = formData.get("dropzoneFile");
+    const caption = formData.get("caption");
 
-    // Type check
+    // Validate file and caption
     if (!(dropzoneFile instanceof File)) {
-      throw new Error("Uploaded file is invalid.");
+      throw new Error("Uploaded file is invalid or missing.");
     }
-
     if (!caption || typeof caption !== "string") {
       throw new Error("Caption is required.");
     }
 
+    // File type and size validation (example: max 5MB, only images)
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!allowedTypes.includes(dropzoneFile.type)) {
+      throw new Error("Only image files (jpeg, png, webp, gif) are allowed.");
+    }
+    if (dropzoneFile.size > maxSize) {
+      throw new Error("File size exceeds 5MB limit.");
+    }
+
     await dbConnect();
 
+    // Convert file to buffer
     const fileBuffer = Buffer.from(await dropzoneFile.arrayBuffer());
-    const base64String = fileBuffer.toString("base64");
 
-    const uploadedImage = await cloudinary.uploader.upload(
-      `data:${dropzoneFile.type};base64,${base64String}`,
-      {
-        folder: "nextjs_gallery", // optional folder
-      }
-    );
+    // Upload directly using Cloudinary's upload_stream for better performance
+    const streamUpload = (buffer: Buffer) => {
+      return new Promise<UploadApiResponse>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "nextjs_gallery",
+            resource_type: "image",
+          },
+          (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
+            if (error) return reject(error);
+            if (!result) return reject(new Error("No result from Cloudinary upload."));
+            resolve(result);
+          }
+        );
+        stream.end(buffer);
+      });
+    };
 
-    console.log("Uploaded image data are:", uploadedImage);
+    const uploadedImage = await streamUpload(fileBuffer);
 
-    const { secure_url, public_id } = uploadedImage;
-
-    if (!secure_url || !public_id) {
+    if (!uploadedImage?.secure_url || !uploadedImage?.public_id) {
       throw new Error("Cloudinary did not return image URL or public ID");
     }
 
     const newPost = new Post<PostType>({
       caption,
       image: {
-        secure_url,
-        public_id,
+        secure_url: uploadedImage.secure_url,
+        public_id: uploadedImage.public_id,
       },
     });
 
-    console.log("New post", newPost);
-
     await newPost.save();
-
-    // Perform mutation
     revalidatePath("/", "page");
-
     console.log("Image and caption uploaded successfully.");
   } catch (error) {
-    console.error(error);
-    throw new Error("Something went wrong. Try again later.");
+    console.error("File upload error:", error);
+    throw new Error(
+      error instanceof Error ? error.message : "Something went wrong. Try again later."
+    );
   }
 };
 
