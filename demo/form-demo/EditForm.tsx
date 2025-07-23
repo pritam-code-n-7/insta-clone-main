@@ -68,7 +68,7 @@ export default function EditForm({
             type="text"
             name="caption"
             defaultValue={caption}
-            className="rounded-xl h-12 shadow-none"
+            className="rounded-xl h-12 shadow-none dark:text-white"
           />
           <Label>This field is for caption.</Label>
           {state.errors?.caption && (<p className="text-red-500 text-sm">{state.errors?.caption}</p>)}

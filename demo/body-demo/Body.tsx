@@ -25,7 +25,7 @@ const Body = async () => {
         {/* File upload field */}
         <div className="space-y-4 dark:text-accent text-gray-500">
           <FileUploadField name="dropzoneFile" />
-          <Label>This field is for file upload.</Label>
+          <Label>This field is for file upload. This will be displayed to user.</Label>
         </div>
 
         {/* Caption input field */}
@@ -37,7 +37,7 @@ const Body = async () => {
             placeholder="Fair and Lovely"
             className="rounded-xl h-12 shadow-none"
           />
-          <Label>This field is for caption.</Label>
+          <Label>This field is for caption. This will be displayed to user.</Label>
         </div>
 
         <SubmitButton />
@@ -51,7 +51,7 @@ const Body = async () => {
         <ScrollArea className="border p-5 rounded-xl h-[500px] bg-muted/50">
           <div className="grid lg:grid-cols-4 grid-cols-1 gap-2">
           {posts.map((post) => (
-            <Card key={post._id} className="bg-blue-50 border-0 shadow-md py-0 w-[300px] lg:h-[450px] h-[400px]">
+            <Card key={post._id} className="bg-zinc-200 dark:bg-zinc-600 border-0 shadow-md py-0 w-[300px] lg:h-[450px] h-[400px]">
                 {post.image?.secure_url && (
                   <Image
                     src={post.image.secure_url}
@@ -63,11 +63,11 @@ const Body = async () => {
                 )}
               <CardContent className="dark:text-black mb-2 h-24">
                 <QuoteIcon className="rotate-180 right-0"/>
-                <p className="font-semibold text-pretty lg:text-base text-xs ml-4">{post.caption}</p>
+                <p className="font-semibold text-pretty lg:text-base text-xs ml-4 dark:text-white">{post.caption}</p>
               </CardContent>
               <CardFooter className="flex items-center justify-between h-24">
                 <Link href={`/edit/${post._id}`}>
-                <ButtonDemo name="Edit" type="button" className="h-12 w-24 rounded-md shadow-md bg-black"/>
+                <ButtonDemo name="Edit" type="button" className="h-12 w-24 rounded-md shadow-md"/>
                 </Link>
                 <DeleteButton id={post._id.toString()} action={deleteAction}/>
               </CardFooter>

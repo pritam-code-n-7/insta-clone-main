@@ -37,7 +37,7 @@ const DeleteButton = ({
   return (
     <Button
       type="submit"
-      className="h-12 w-24 bg-red-500 rounded-lg shadow-md"
+      className="h-12 w-24 bg-red-500 hover:bg-red-400 rounded-lg shadow-md"
       onClick={handleClick}
       disabled={isPending}
     >
