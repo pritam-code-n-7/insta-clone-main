@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { dbConnect } from "@/lib/db";
+import Header from "@/demo/header-demo/Header";
+import Footer from "@/demo/footer-demo/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +40,9 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+        <Header />
         {children}
+        <Footer />
         <Toaster />
         </ThemeProvider>
       </body>

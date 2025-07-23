@@ -1,17 +1,8 @@
-'use server' 
-
-import React from 'react'
-
-import Body from '@/demo/body-demo/Body'
-import Header from '@/demo/header-demo/Header'
+import React from "react";
+import Body from "@/demo/body-demo/Body";
 
 function page() {
-  return (
-    <div>
-      <Header />
-      <Body />
-    </div>
-  )
+  return <Body />;
 }
 
-export default page
+export default page;
