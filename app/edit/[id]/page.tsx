@@ -1,10 +1,19 @@
 import { getActionById } from "@/app/actions/fileAction";
 import EditForm from "@/demo/form-demo/EditForm";
-import React from "react";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const {id} = params;
+// Update the params type to be a Promise
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  // Await the params to get the actual values
+  const { id } = await params;
   const postDetails = await getActionById(id);
+
+  if (!postDetails) {
+    return (
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <p>Post not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
