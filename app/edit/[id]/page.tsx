@@ -3,7 +3,7 @@ import EditForm from "@/demo/form-demo/EditForm";
 import React from "react";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const {id} = await params;
+  const {id} = params;
   const postDetails = await getActionById(id);
 
   return (
