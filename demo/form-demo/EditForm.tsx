@@ -41,9 +41,12 @@ export default function EditForm({
     <Card className="flex flex-col items-center justify-center gap-4 p-4">
        { state.success ?
        (
-        <div className="flex flex-col items-center gap-4 justify-center">
-            <SquareCheck size={25} className="text-green-500"/>
-            <p className="text-pretty text-center lg:text-base text-sm font-medium">Thank you for updating. One of our team member will reach you soon!</p>
+        <div className="flex flex-col items-center gap-6 justify-center">
+            <SquareCheck size={40} className="text-green-500"/>
+            <div className="text-pretty text-center lg:text-xl text-sm">
+            <p>Thank you for updating.</p>
+            <p>One of our team member will reach you soon!</p>
+            </div>
             <Link href={'/'}>
             <ButtonDemo name="Back to Home" type="button" className="bg-emerald-500 shadow-md rounded-md h-12"/>
             </Link>

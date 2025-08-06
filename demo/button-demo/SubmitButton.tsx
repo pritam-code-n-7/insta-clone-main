@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 import React from "react";
 import { useFormStatus } from "react-dom";
@@ -11,7 +12,12 @@ const SubmitButton = () => {
 
   return (
     <Button type="submit" disabled={pending} className="h-12 bg-blue-500 hover:bg-blue-400 rounded-lg shadow-md w-full">
-      {pending ? "Submitting..." : "Submit"}
+      {pending ? (
+        <>
+            <Loader2 className="animate-spin"/>
+            Submitting...
+        </>
+      ) : "Submit"}
     </Button>
   );
 };
