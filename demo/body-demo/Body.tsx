@@ -50,7 +50,9 @@ const Body = async () => {
 
         <ScrollArea className="border p-5 rounded-xl h-[500px] bg-muted/50">
           <div className="grid lg:grid-cols-4 grid-cols-1 gap-2">
-          {posts.map((post) => (
+          {posts.length === 0 ? <div>Your list is empty! Please upload some image.</div> : 
+          
+          posts.map((post) => (
             <Card key={post._id} className="bg-zinc-200 dark:bg-zinc-600 border-0 shadow-md py-0 w-[300px] lg:h-[450px] h-[400px]">
                 {post.image?.secure_url && (
                   <Image
