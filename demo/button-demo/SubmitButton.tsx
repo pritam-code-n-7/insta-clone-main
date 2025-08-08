@@ -15,9 +15,9 @@ const SubmitButton = () => {
       {pending ? (
         <>
             <Loader2 className="animate-spin"/>
-            Submitting...
+            Uploading...
         </>
-      ) : "Submit"}
+      ) : "Upload"}
     </Button>
   );
 };
